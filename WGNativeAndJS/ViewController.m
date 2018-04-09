@@ -7,8 +7,12 @@
 //
 
 #import "ViewController.h"
+#import "UIWebViewController.h"
+#import "WKWebViewController.h"
 
 @interface ViewController ()
+
+@property (nonatomic, strong) NSArray *titleArr;
 
 @end
 
@@ -16,14 +20,39 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    
+    [self setBaseView];
 }
 
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)setBaseView{
+    for (int i = 0; i<2; i++) {
+        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 100 + i * 50, 200, 30)];
+        [btn setTitle:self.titleArr[i] forState:UIControlStateNormal];
+        [btn setBackgroundColor:[UIColor yellowColor]];
+        [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        btn.tag = i + 10;
+        [btn addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:btn];
+    }
 }
+
+- (void)btnClicked:(UIButton *)sender{
+    if (sender.tag == 10) {
+        WKWebViewController *wkweb = [[WKWebViewController alloc] init];
+        [self.navigationController pushViewController:wkweb animated:YES];
+    }else{
+        UIWebViewController * uiweb = [[UIWebViewController alloc] init];
+        [self.navigationController pushViewController:uiweb animated:YES];
+    }
+}
+
+-(NSArray *)titleArr{
+    if (!_titleArr) {
+        _titleArr = [NSArray arrayWithObjects:@"WKWebview", @"UIWebview", nil];
+    }
+    return _titleArr;
+}
+
 
 
 @end
